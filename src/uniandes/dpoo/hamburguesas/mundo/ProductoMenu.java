@@ -20,8 +20,15 @@ public class ProductoMenu implements Producto
      * @param nombre
      * @param precioBase
      */
-    public ProductoMenu( String nombre, int precioBase )
+    public ProductoMenu(String nombre, int precioBase)
     {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del producto no puede ser null, vacío o contener solo espacios en blanco");
+        }
+        if (precioBase < 0) {
+            throw new IllegalArgumentException("El precio no puede ser negativo");
+        }
+        
         this.nombre = nombre;
         this.precioBase = precioBase;
     }
