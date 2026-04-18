@@ -1,0 +1,10 @@
+Cliente: Sergi
+Dirección: Pan
+----------------
+Combo combo todoterreno
+ Descuento: 0.07
+            $2583
+----------------
+Precio Neto:  2583
+IVA:          490
+Precio Total: 3073
