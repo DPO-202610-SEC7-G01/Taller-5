@@ -169,9 +169,16 @@ public class Restaurante
      */
     public void cargarInformacionRestaurante( File archivoIngredientes, File archivoMenu, File archivoCombos ) throws HamburguesaException, NumberFormatException, IOException
     {
-        cargarIngredientes( archivoIngredientes );
-        cargarMenu( archivoMenu );
-        cargarCombos( archivoCombos );
+    	
+    	    if (archivoIngredientes != null) {
+    	        cargarIngredientes(archivoIngredientes);
+    	    }
+    	    if (archivoMenu != null) {
+    	        cargarMenu(archivoMenu);
+    	    }
+    	    if (archivoCombos != null) {
+    	        cargarCombos(archivoCombos);
+    	    }
     }
 
     private void cargarIngredientes( File archivoIngredientes ) throws IngredienteRepetidoException, IOException
