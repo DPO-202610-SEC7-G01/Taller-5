@@ -38,10 +38,6 @@ public class RestauranteTest {
     
     @Before
     public void setUp() throws IOException {
-       File archivoPedidos = new File("data/pedidos.txt");
-    		    if (archivoPedidos.exists()) {
-    		        archivoPedidos.delete();
-    		    }
         restaurante = new Restaurante();
         
         archivoIngredientes = new File("data/ingredientes.txt");

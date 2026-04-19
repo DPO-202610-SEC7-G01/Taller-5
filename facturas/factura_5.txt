@@ -1,0 +1,8 @@
+Cliente: pa
+Dirección: ka
+----------------
+agua cristal sin gas    +tocineta express                2500    +papa callejera                2000            5000
+----------------
+Precio Neto:  9500
+IVA:          1805
+Precio Total: 11305

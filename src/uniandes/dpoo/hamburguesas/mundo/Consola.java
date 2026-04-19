@@ -20,9 +20,9 @@ public void cargarDatos() throws NumberFormatException, HamburguesaException, IO
 	    File archivoIngredientes = new File("data/ingredientes.txt");
 	    File archivoMenu = new File("data/menu.txt");
 	    File archivoCombos = new File("data/combos.txt");
-
+	    
 	    miRestaurante.cargarInformacionRestaurante(archivoIngredientes, archivoMenu, archivoCombos);
-	}
+	    miRestaurante.cargarPedidos();	}
 
 
 // Primera Opción
@@ -230,19 +230,22 @@ public Producto agregarDelCombo() {
     return null;
 }
 
-//Opción 3 
+//Opción 4
 public void cerrarPedido() {
- System.out.println("\n============ Cerrando Pedido y Generando Factura ========");
- 
- try {
-     miRestaurante.cerrarYGuardarPedido();
-     System.out.println("Pedido cerrado con éxito. La factura ha sido generada. " );
-     System.out.println(miRestaurante.getPedidos().getLast().getIdPedido());
- } catch (NoHayPedidoEnCursoException e) {
-     System.err.println(" Error: " + e.getMessage());
- } catch (IOException e) {
-     System.err.println("Error de archivo: No se pudo guardar la factura. Revisa la carpeta 'facturas'.");
- }
+    System.out.println("\n============ Cerrando Pedido y Generando Factura ========");
+    
+    try {
+        miRestaurante.cerrarYGuardarPedido();
+        System.out.println("Pedido cerrado con éxito. La factura ha sido generada.");
+        Pedido ultimoPedido = miRestaurante.getPedidos().getLast();
+        System.out.println("Pedido con el ID número: " + ultimoPedido.getIdPedido());
+        System.out.println("\n--- FACTURA GENERADA ---");
+        System.out.println(ultimoPedido.generarTextoFactura());
+    } catch (NoHayPedidoEnCursoException e) {
+        System.err.println(" Error: " + e.getMessage());
+    } catch (IOException e) {
+        System.err.println("Error de archivo: No se pudo guardar la factura. Revisa la carpeta 'facturas'.");
+    }
 }
 
 //Opción 4
@@ -266,7 +269,6 @@ public void consultarPedido() {
     if (!encontrado) {
         System.out.println("No se encontró ningún pedido con el ID: " + ID);
     }
-
 }
 
 public void guardarDatos() {
@@ -301,13 +303,20 @@ public static void main(String[] args) throws NumberFormatException, Hamburguesa
 					consola.mostrarMenu();
 					break;
 				case 1:
-					consola.iniciarNuevoPedido();
+					if (consola.miRestaurante.getPedidoEnCurso()==null) {
+						consola.iniciarNuevoPedido();}
+					else {
+					System.out.println("Ya hay un pedido en  curso.");}
 					break;
 				case 2:
 					consola.agregarElemento();
 					break;
 				case 3:
-					consola.cerrarPedido();
+					if (consola.miRestaurante.getPedidoEnCurso()!= null) {
+					consola.cerrarPedido();}
+					else {
+					System.out.println("No hay pedido que guardar.");}
+
 					break;
 				case 4:
 					consola.consultarPedido();

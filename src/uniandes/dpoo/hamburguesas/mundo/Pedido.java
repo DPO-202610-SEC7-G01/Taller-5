@@ -18,7 +18,7 @@ public class Pedido
      */
     private static final double IVA = 0.19;
 
-	private static final String ARCHIVO_CONTADOR = "data/contador.txt";
+	private static final String ARCHIVO_CONTADOR = "data/contador.txt";// para llevar el registro de numero de pedidos
 
     /**
      * El número de pedidos que se han creado hasta el momento

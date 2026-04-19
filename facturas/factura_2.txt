@@ -1,0 +1,10 @@
+Cliente: Alvarito
+Dirección: SantaFe
+----------------
+Combo combo corral queso
+ Descuento: 0.1
+            $23850
+----------------
+Precio Neto:  23850
+IVA:          4531
+Precio Total: 28381
