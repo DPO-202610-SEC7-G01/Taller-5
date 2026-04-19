@@ -49,10 +49,18 @@ public class Pedido
      */
     public Pedido( String nombreCliente, String direccionCliente )
     {
+    	if (nombreCliente == null || nombreCliente.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del producto no puede ser null, vacío o contener solo espacios en blanco");
+        }
         this.idPedido = numeroPedidos++;
         this.nombreCliente = nombreCliente;
         this.direccionCliente = direccionCliente;
         productos = new ArrayList<Producto>( );
+    }
+    
+    //Métodos Adicionales
+    public String getDireccionCliente() {
+    	return this.direccionCliente;
     }
 
     /**

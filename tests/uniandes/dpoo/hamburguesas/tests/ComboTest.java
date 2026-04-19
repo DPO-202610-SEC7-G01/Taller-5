@@ -59,31 +59,66 @@ public class ComboTest {
 	        });
 	    }
 	 
-	 // Debe haber un test que de error si se intenta con un descuento fuera de 0 o 1. 
-	 
+	 @Test
+		void testDescuentoInvalidoNegativo() {
+		    assertThrows(IllegalArgumentException.class, () -> {
+		        new Combo(NOMBRE_COMBO, -0.5, productos);
+		    });
+		}
+		
+		@Test
+		void testDescuentoInvalidoMayorAUno() {
+		    assertThrows(IllegalArgumentException.class, () -> {
+		        new Combo(NOMBRE_COMBO, 1.5, productos);
+		    });
+		}
 	 
 	  @Test
 	  void testGetPrecio() {
 	    	assertTrue(comboNuevo.getPrecio() > 0);
-	        assertEquals((PRECIO_NORMAL1+PRECIO_NORMAL2)*DESCUENTO, comboNuevo.getPrecio());
+	        assertEquals((PRECIO_NORMAL1+PRECIO_NORMAL2)*(1-DESCUENTO), comboNuevo.getPrecio());
 	    
 	    }
     
-	  //Debe haber un test que de error si se intenta crear un combo quee no tiene productos
+	  @Test
+		void testComboConUnSoloProducto() {
+		    ArrayList<ProductoMenu> unProducto = new ArrayList<>();
+		    unProducto.add(producto1);
+		    Combo comboSolo = new Combo("combo simple", 0.15, unProducto);
+		    int precioEsperado = (int)(PRECIO_NORMAL1 * (1 - 0.15));
+		    assertEquals(precioEsperado, comboSolo.getPrecio());
+		}
 	    
 	  @Test
 	  void testGenerarTextoFactura() {
-	        String factura = comboNuevo.generarTextoFactura();
-	        
-	        assertTrue(factura.contains(NOMBRE_COMBO));
-	        assertTrue(factura.contains("+" + NOMBRE_PRODUCTO1));
-	        assertTrue(factura.contains("+" + NOMBRE_PRODUCTO2));
-	        assertTrue(factura.contains(String.valueOf(PRECIO_NORMAL1)));
-	        assertTrue(factura.contains(String.valueOf(PRECIO_NORMAL2)));
-	    }
+	      String factura = comboNuevo.generarTextoFactura();
+	      
+	      assertTrue(factura.contains("Combo " + NOMBRE_COMBO));
+	      assertTrue(factura.contains("Descuento: " + DESCUENTO));
+	      assertTrue(factura.contains("$" + comboNuevo.getPrecio()));
+	  }
 	  
-	  // No se pueden modificar los elementos de un combo  osea no debe haber un setter ni nada de eso
-	  // para la lista de productos del combo
+	  @Test
+		void testNoExistenSettersParaProductos() {
+		    assertThrows(NoSuchMethodException.class, () -> {
+		        comboNuevo.getClass().getMethod("setItemsCombo", ArrayList.class);
+		    });
+		}
+	  
+	  @Test
+		void testProductosOriginalesNoSeModificanAlCrearCombo() {
+		    int precioOriginalProducto1 = producto1.getPrecio();
+		    int precioOriginalProducto2 = producto2.getPrecio();
+		    String nombreOriginalProducto1 = producto1.getNombre();
+		    String nombreOriginalProducto2 = producto2.getNombre();
+		    
+		    new Combo(NOMBRE_COMBO, DESCUENTO, productos);
+		    
+		    assertEquals(precioOriginalProducto1, producto1.getPrecio());
+		    assertEquals(precioOriginalProducto2, producto2.getPrecio());
+		    assertEquals(nombreOriginalProducto1, producto1.getNombre());
+		    assertEquals(nombreOriginalProducto2, producto2.getNombre());
+		}
 	  
 	  
 }
