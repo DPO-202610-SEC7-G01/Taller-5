@@ -1,7 +1,10 @@
 package uniandes.dpoo.hamburguesas.mundo;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -14,6 +17,8 @@ public class Pedido
      * El porcentaje del IVA como un número entre 0 y 1
      */
     private static final double IVA = 0.19;
+
+	private static final String ARCHIVO_CONTADOR = "data/contador.txt";
 
     /**
      * El número de pedidos que se han creado hasta el momento
@@ -47,15 +52,16 @@ public class Pedido
      * @param nombreCliente
      * @param direccionCliente
      */
-    public Pedido( String nombreCliente, String direccionCliente )
+    public Pedido(String nombreCliente, String direccionCliente)
     {
-    	if (nombreCliente == null || nombreCliente.trim().isEmpty()) {
+        if (nombreCliente == null || nombreCliente.trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre del producto no puede ser null, vacío o contener solo espacios en blanco");
         }
         this.idPedido = numeroPedidos++;
+        guardarContador();
         this.nombreCliente = nombreCliente;
         this.direccionCliente = direccionCliente;
-        productos = new ArrayList<Producto>( );
+        productos = new ArrayList<Producto>();
     }
     
     //Métodos Adicionales
@@ -63,6 +69,39 @@ public class Pedido
     	return this.direccionCliente;
     }
 
+    static {
+        cargarContador();
+    }
+
+    private static void cargarContador() {
+        File archivo = new File(ARCHIVO_CONTADOR);
+        if (archivo.exists()) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+                String linea = reader.readLine();
+                if (linea != null && !linea.isEmpty()) {
+                    numeroPedidos = Integer.parseInt(linea);
+                }
+            } catch (IOException e) {
+                numeroPedidos = 0;
+            }
+        } else {
+            numeroPedidos = 0;
+        }
+    }
+
+    private static void guardarContador() {
+        try (PrintWriter writer = new PrintWriter(ARCHIVO_CONTADOR)) {
+            writer.print(numeroPedidos);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void reiniciarContadorParaTests() {
+        numeroPedidos = 0;
+        guardarContador();
+    }
+    
     /**
      * Retorna el identificador del pedido
      * @return

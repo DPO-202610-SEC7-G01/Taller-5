@@ -1,0 +1,10 @@
+Cliente: Anyela
+Dirección: cc
+----------------
+Combo combo todoterreno
+ Descuento: 0.07
+            $34317
+----------------
+Precio Neto:  34317
+IVA:          6520
+Precio Total: 40837

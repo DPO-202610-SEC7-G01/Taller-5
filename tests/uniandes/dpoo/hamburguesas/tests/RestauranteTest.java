@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Field;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +34,14 @@ public class RestauranteTest {
     private File archivoIngredientes;
     private File archivoMenu;
     private File archivoCombos;
+
     
     @Before
     public void setUp() throws IOException {
+       File archivoPedidos = new File("data/pedidos.txt");
+    		    if (archivoPedidos.exists()) {
+    		        archivoPedidos.delete();
+    		    }
         restaurante = new Restaurante();
         
         archivoIngredientes = new File("data/ingredientes.txt");
@@ -47,6 +51,7 @@ public class RestauranteTest {
     
     @Test
     public void testConstructorInicializaListasVacias() {
+    	restaurante = new Restaurante();
         assertTrue(restaurante.getPedidos().isEmpty());
         assertTrue(restaurante.getIngredientes().isEmpty());
         assertTrue(restaurante.getMenuBase().isEmpty());
@@ -174,9 +179,7 @@ public class RestauranteTest {
     
     @Test
     public void testCerrarPedidoGeneraFacturaYAgregaALista() throws Exception {
-        Field field = Pedido.class.getDeclaredField("numeroPedidos");
-        field.setAccessible(true);
-        field.setInt(null, 0);
+        Pedido.reiniciarContadorParaTests();
         
         restaurante.iniciarPedido(NOMBRE_CLIENTE1, DIRECCION_CLIENTE1);
         restaurante.getPedidoEnCurso().agregarProducto(new ProductoMenu(NOMBRE_PRODUCTO, PRECIO_NORMAL));
@@ -191,9 +194,7 @@ public class RestauranteTest {
     
     @Test
     public void testMultiplesPedidosSeAgreganALista() throws Exception {
-        Field field = Pedido.class.getDeclaredField("numeroPedidos");
-        field.setAccessible(true);
-        field.setInt(null, 0);
+        Pedido.reiniciarContadorParaTests();
         
         restaurante.iniciarPedido(NOMBRE_CLIENTE1, DIRECCION_CLIENTE1);
         restaurante.getPedidoEnCurso().agregarProducto(new ProductoMenu(NOMBRE_PRODUCTO, PRECIO_NORMAL));
@@ -213,9 +214,7 @@ public class RestauranteTest {
     
     @Test
     public void testPedidosNoSeSobrescriben() throws Exception {
-        Field field = Pedido.class.getDeclaredField("numeroPedidos");
-        field.setAccessible(true);
-        field.setInt(null, 0);
+        Pedido.reiniciarContadorParaTests();
         
         restaurante.iniciarPedido(NOMBRE_CLIENTE1, DIRECCION_CLIENTE1);
         int idPedido1 = restaurante.getPedidoEnCurso().getIdPedido();
