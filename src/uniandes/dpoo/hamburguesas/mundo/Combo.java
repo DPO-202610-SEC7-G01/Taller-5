@@ -30,11 +30,23 @@ public class Combo implements Producto
      */
     public Combo( String nombre, double descuento, ArrayList<ProductoMenu> items )
     {
+    	 if (nombre == null || nombre.trim().isEmpty()) {
+             throw new IllegalArgumentException("El nombre del producto no puede ser null, vacío o contener solo espacios en blanco");
+         }
+         if (descuento < 0 || descuento > 1) {
+             throw new IllegalArgumentException("El descuento está fuera del rango.");
+         }
+         if (items.isEmpty()) {
+             throw new IllegalArgumentException("No pueden haber combos sin productos.");
+         }
         this.itemsCombo = new ArrayList<>( items );
         this.nombreCombo = nombre;
         this.descuento = descuento;
     }
-
+    
+   
+    
+    
     @Override
     public String getNombre( )
     {

@@ -10,7 +10,7 @@ import uniandes.dpoo.hamburguesas.mundo.ProductoMenu;
 
 public class ProductoMenuTest {
     
-    private static final String NOMBRE_PRODUCTO = "Hamburguesa Sencilla";
+    private static final String NOMBRE_PRODUCTO = "wrap de pollo";
     private static final int PRECIO_NORMAL = 15000;
     private static final String NOMBRE_PRODUCTO_CERO = "Agua";
     private static final int PRECIO_CERO = 0;
@@ -32,19 +32,19 @@ public class ProductoMenuTest {
         assertFalse(producto.getNombre().isBlank());
     }
     
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   ", "\t", "\n", "  \t  ", " \n\t ", "\t\n "})
+    void testNombresInvalidosLanzanExcepcion(String nombreInvalido) {
+        assertThrows(IllegalArgumentException.class, () -> {
+            new ProductoMenu(nombreInvalido, 5000);
+        });
+    }
+    
     @Test
     void testGetPrecio() {
         assertEquals(PRECIO_NORMAL, producto.getPrecio());
         assertTrue(producto.getPrecio() > 0);
-    }
-    
-    @Test
-    void testGenerarTextoFactura() {
-        String factura = producto.generarTextoFactura();
-        assertTrue(factura.contains(NOMBRE_PRODUCTO));
-        assertTrue(factura.contains("$" + PRECIO_NORMAL));
-        String expected = String.format(FORMATO_FACTURA_ESPERADO, NOMBRE_PRODUCTO, PRECIO_NORMAL);
-        assertEquals(expected, factura);
     }
     
     @Test
@@ -65,15 +65,39 @@ public class ProductoMenuTest {
         assertEquals(expected, gratis.generarTextoFactura());
     }
     
- 
+    @Test
+    void testGenerarTextoFactura() {
+        String factura = producto.generarTextoFactura();
+        assertTrue(factura.contains(NOMBRE_PRODUCTO));
+        assertTrue(factura.contains("$" + PRECIO_NORMAL));
+        String expected = String.format(FORMATO_FACTURA_ESPERADO, NOMBRE_PRODUCTO, PRECIO_NORMAL);
+        assertEquals(expected, factura);
+    }
     
-    @ParameterizedTest //Se van a probar varios parámetros
-    @NullAndEmptySource //agrega el null y "" 
-    @ValueSource(strings = {"   ", "\t", "\n", "  \t  ", " \n\t ", "\t\n "})
-    void testNombresInvalidosLanzanExcepcion(String nombreInvalido) {
-        assertThrows(IllegalArgumentException.class, () -> { //Debe verificar que lanze un error que dice ahí 
-            new ProductoMenu(nombreInvalido, 5000);
+    
+    @Test
+    void testNoExistenSetters() {
+        assertThrows(NoSuchMethodException.class, () -> {
+            producto.getClass().getMethod("setNombre", String.class);
+        });
+        assertThrows(NoSuchMethodException.class, () -> {
+            producto.getClass().getMethod("setPrecio", int.class);
         });
     }
+    
+    @Test
+    void testIndependenciaEntreObjetosMismosDatos() {
+        ProductoMenu productoA = new ProductoMenu(NOMBRE_PRODUCTO, PRECIO_NORMAL);
+        ProductoMenu productoB = new ProductoMenu(NOMBRE_PRODUCTO, PRECIO_NORMAL);
+        
+        assertEquals(productoA.getNombre(), productoB.getNombre());
+        assertEquals(productoA.getPrecio(), productoB.getPrecio());
+        
+        productoA = new ProductoMenu(NOMBRE_PRODUCTO, PRECIO_NORMAL + 5000);
+        
+        assertNotEquals(productoA.getPrecio(), productoB.getPrecio());
+        assertEquals(productoA.getNombre(), productoB.getNombre());
+    }
+    
     
 }

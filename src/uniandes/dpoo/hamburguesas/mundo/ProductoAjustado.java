@@ -35,18 +35,76 @@ public class ProductoAjustado implements Producto
     
     //Métodos Adicionales
     public void agregarIngrediente(Ingrediente ingrediente) {
-        this.agregados.add(ingrediente);
-        this.eliminados.remove(ingrediente);
+        boolean yaExiste = false;
+        for (Ingrediente ing : this.agregados) {
+            if (ing.getNombre().equals(ingrediente.getNombre())) {
+                yaExiste = true;
+                break;
+            }
+        }
+        if (!yaExiste) {
+            this.agregados.add(ingrediente);
+        }
+        
+        for (int i = 0; i < this.eliminados.size(); i++) {
+            if (this.eliminados.get(i).getNombre().equals(ingrediente.getNombre())) {
+                this.eliminados.remove(i);
+                break;
+            }
+        }
     }
 
     public void eliminarIngrediente(Ingrediente ingrediente) {
-        this.eliminados.add(ingrediente);
-        this.agregados.remove(ingrediente);
+        boolean existeEnAgregados = false;
+        for (Ingrediente ing : this.agregados) {
+            if (ing.getNombre().equals(ingrediente.getNombre())) {
+                existeEnAgregados = true;
+                break;
+            }
+        }
+        
+        if (!existeEnAgregados) {
+            boolean yaEstaEliminado = false;
+            for (Ingrediente ing : this.eliminados) {
+                if (ing.getNombre().equals(ingrediente.getNombre())) {
+                    yaEstaEliminado = true;
+                    break;
+                }
+            }
+            if (!yaEstaEliminado) {
+                throw new IllegalArgumentException("El ingrediente " + ingrediente.getNombre() + " no está en el producto para eliminar");
+            }
+            return;
+        }
+        
+        boolean yaExisteEnEliminados = false;
+        for (Ingrediente ing : this.eliminados) {
+            if (ing.getNombre().equals(ingrediente.getNombre())) {
+                yaExisteEnEliminados = true;
+                break;
+            }
+        }
+        
+        if (!yaExisteEnEliminados) {
+            this.eliminados.add(ingrediente);
+        }
+        
+        for (int i = 0; i < this.agregados.size(); i++) {
+            if (this.agregados.get(i).getNombre().equals(ingrediente.getNombre())) {
+                this.agregados.remove(i);
+                break;
+            }
+        }
     }
-
+    
     public ArrayList<Ingrediente> getAgregados(){
     	return agregados;
     }
+    
+    public ArrayList<Ingrediente> getEliminados() {
+    	return eliminados;
+    }
+    
     @Override
     public String getNombre( )
     {
